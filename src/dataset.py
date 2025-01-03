@@ -19,11 +19,6 @@ def train_collate_fn(batch):
     labels = [item[1] for item in batch]
     prompts = ["generated caption:" for item in batch]
 
-    # current labels are json format 
-    # {"prompt": "<image caption>"}
-    # extract the caption part fron json
-    labels = [label["prompt"] for label in labels]
-
     inputs = processor(text=prompts, images=images, suffix=labels, return_tensors="pt", padding=True, truncation=True, max_length=config.get("max_length"))
 
     input_ids = inputs["input_ids"]
@@ -38,8 +33,6 @@ def test_collate_fn(batch):
     images = [item[0] for item in batch]
     labels = [item[1] for item in batch]
     prompts = ["generated caption:" for item in batch]
-
-    labels = [label["prompt"] for label in labels]
     
     inputs = processor(text=prompts, images=images, return_tensors="pt", padding=True, truncation=True, max_length=config.get("max_length"))
 
