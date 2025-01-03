@@ -7,7 +7,7 @@ import numpy as np
 
 class ImageCaptioningModel(L.LightningModule):
 
-    def __init__(self, config, processor, model):
+    def __init__(self, model, processor, config):
         super().__init__()
         self.config = config
         self.processor = processor
