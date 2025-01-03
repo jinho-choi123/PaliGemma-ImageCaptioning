@@ -18,7 +18,7 @@ class ImageCaptioningModel(L.LightningModule):
 
         self.train_losses = []
 
-    def training_step(self, batch_ batch_idx):
+    def training_step(self, batch_,  batch_idx):
 
         input_ids, token_type_ids, attention_mask, pixel_values, labels = batch_
 
