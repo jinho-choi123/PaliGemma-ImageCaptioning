@@ -17,7 +17,7 @@ def train_collate_fn(batch):
     # each tuple is (image, label)
     images = [item[0] for item in batch]
     labels = [item[1] for item in batch]
-    prompts = ["generated caption:" for item in batch]
+    prompts = ["<image>generated caption:" for _ in batch]
 
     inputs = processor(text=prompts, images=images, suffix=labels, return_tensors="pt", padding=True, truncation=True, max_length=config.get("max_length"))
 
@@ -32,7 +32,7 @@ def train_collate_fn(batch):
 def test_collate_fn(batch):
     images = [item[0] for item in batch]
     labels = [item[1] for item in batch]
-    prompts = ["generated caption:" for item in batch]
+    prompts = ["<image>generated caption:" for _ in batch]
     
     inputs = processor(text=prompts, images=images, return_tensors="pt", padding=True, truncation=True, max_length=config.get("max_length"))
 
