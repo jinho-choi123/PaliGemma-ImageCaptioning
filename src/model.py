@@ -12,8 +12,8 @@ class ImageCaptioningModel(L.LightningModule):
         self.config = config
         self.processor = processor
         self.model = model
-        self.lr = config.get("lr", 1e-3)
-        self.batch_size = config.get("batch_size", 32)
+        self.lr = self.config.get("lr", 1e-3)
+        self.batch_size = self.config.get("batch_size", 32)
         self.processor = processor
 
         self.train_losses = []
@@ -40,13 +40,13 @@ class ImageCaptioningModel(L.LightningModule):
     
     def validation_step(self, batch, batch_idx):
 
-        input_ids, token_type_ids, attention_mask, pixel_values, labels = batch
+        input_ids, attention_mask, pixel_values, labels = batch
 
         generated_ids = self.model.generate(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
                 pixel_values=pixel_values,
-                max_new_tokens=config.get("max_new_tokens")
+                max_new_tokens=self.config.get("max_new_tokens")
                 )
         predictions = self.processor.batch_decode(generated_ids[:, input_ids.size(1)+1:], skip_special_tokens=True)
 
