@@ -9,6 +9,8 @@ from .dataset import processor
 from .train_callbacks import PushToHubCallback
 import lightning as L
 
+torch.manual_seed(42)
+
 # define wandb logger
 wandb_logger = WandbLogger(project=config.get("wandb_project"))
 
