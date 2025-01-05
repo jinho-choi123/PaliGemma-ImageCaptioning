@@ -64,9 +64,9 @@ class ImageCaptioningModel(L.LightningModule):
         
         # if the verbose flag is set, log the first 5 examples
         if self.config.get("verbose", False) and batch_idx <= 5:
-            columns = ["image", "prompt", "ground_truth", "prediction"]
+            columns = ["image", "ground_truth", "prediction"]
             datas = [
-                    [wandb.Image(pixel_values[i]), self.processor.decode(input_ids[i]), labels[i], predictions[i]] for i in range(1)
+                    [wandb.Image(pixel_values[i]), labels[i], predictions[i]] for i in range(1)
                     ]
 
             self.logger.log_table(key="val/examples", columns=columns, data=datas)
