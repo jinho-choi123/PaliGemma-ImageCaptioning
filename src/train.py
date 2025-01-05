@@ -35,6 +35,7 @@ model_module = ImageCaptioningModel(model, processor, config)
 trainer = L.Trainer(
         max_epochs=50,
         gradient_clip_val=1.0,
+        num_sanity_val_steps=5,
         logger=wandb_logger,
         callbacks=[PushToHubCallback()]
         )

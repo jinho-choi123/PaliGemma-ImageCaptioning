@@ -4,6 +4,8 @@ from torch.utils.data import DataLoader
 import torch
 from .dataset import train_dataset, val_dataset, test_collate_fn, train_collate_fn
 import numpy as np
+import wandb
+import evaluate
 
 class ImageCaptioningModel(L.LightningModule):
 
@@ -15,6 +17,8 @@ class ImageCaptioningModel(L.LightningModule):
         self.lr = self.config.get("lr", 1e-3)
         self.batch_size = self.config.get("batch_size", 32)
         self.processor = processor
+        self.bleu_metric = evaluate.load("bleu")
+        self.rouge_metric = evaluate.load("rouge")
 
         self.train_losses = []
 
@@ -50,9 +54,22 @@ class ImageCaptioningModel(L.LightningModule):
                 )
         predictions = self.processor.batch_decode(generated_ids[:, input_ids.size(1)+1:], skip_special_tokens=True)
 
-        if self.config.get("verbose", False) and batch_idx == 1:
-            self.log("val/predictions", predictions[0])
-            self.log("val/labels", labels[0])
+        bleu_score: float = self.bleu_metric.compute(references=labels, predictions=predictions)['bleu']
+        rouge1_score: float = self.rouge_metric.compute(references=labels, predictions=predictions)['rouge1']
+        self.log("val/step_bleu", bleu_score)
+        self.log("val/epoch_bleu", bleu_score, on_epoch=True)
+
+        self.log("val/step_rouge1", rouge1_score)
+        self.log("val/epoch_rouge1", rouge1_score, on_epoch=True)
+        
+        # if the verbose flag is set, log the first 5 examples
+        if self.config.get("verbose", False) and batch_idx <= 5:
+            columns = ["image", "prompt", "ground_truth", "prediction"]
+            datas = [
+                    [wandb.Image(pixel_values[i]), self.processor.decode(input_ids[i]), labels[i], predictions[i]] for i in range(1)
+                    ]
+
+            self.logger.log_table(key="val/examples", columns=columns, data=datas)
 
         return predictions
 
