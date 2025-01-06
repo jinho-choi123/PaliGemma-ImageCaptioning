@@ -44,9 +44,9 @@ trainer = L.Trainer(
         callbacks=[PushToHubCallback()],
         )
 
-tuner = Tuner(trainer)
+# tuner = Tuner(trainer)
 
 # tuner.scale_batch_size(model_module)
-tuner.lr_find(model_module)
+# tuner.lr_find(model_module)
 
 trainer.fit(model_module)
