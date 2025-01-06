@@ -1,7 +1,7 @@
 
 config = {
         "pretrained_repo_id": "google/paligemma-3b-pt-224",
-        "max_length": 156,
+        "max_length": 256,
         "max_new_tokens": 128,
         "lora_r": 8,
         "wandb_project": "paligemma-image-captioning",

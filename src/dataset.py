@@ -27,6 +27,22 @@ def train_collate_fn(batch):
     pixel_values = inputs["pixel_values"]
     labels = inputs["labels"]
 
+    print(f"train_collate_fn")
+    print(f"input_ids: {input_ids.size()}")
+    print(f"token_type_ids: {token_type_ids.size()}")
+    print(f"attention_mask: {attention_mask.size()}")
+    print(f"pixel_values: {pixel_values.size()}")
+    print(f"labels: {labels.size()}")
+
+    # check if the input_ids length is 14 * 14 + 128
+    # 14 * 14 is the length of the image tokens
+    # 128 is the length of the prompt tokens with padding
+    assert input_ids.size(1) == 14 * 14 + config.get("max_length")
+
+    # check if the input_ids and labels are of same length
+    assert input_ids.size(1) == labels.size(1)
+
+
     return input_ids, token_type_ids, attention_mask, pixel_values, labels
 
 def test_collate_fn(batch):
@@ -39,6 +55,12 @@ def test_collate_fn(batch):
     input_ids = inputs["input_ids"]
     attention_mask = inputs["attention_mask"]
     pixel_values = inputs["pixel_values"]
+
+    print(f"test_collate_fn")
+    print(f"input_ids: {input_ids.size()}")
+    print(f"attention_mask: {attention_mask.size()}")
+    print(f"pixel_values: {pixel_values.size()}")
+    print(f"labels: {labels}")
 
     return input_ids, attention_mask, pixel_values, labels
 
