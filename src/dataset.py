@@ -35,6 +35,9 @@ def train_collate_fn(batch):
     # check if the input_ids and labels are of same length
     assert input_ids.size(1) == labels.size(1)
 
+    # check if pixel_values is of shape (batch_size, 3, 224, 224)
+    assert pixel_values.size() == (len(images), 3, 224, 224)
+
 
     return input_ids, token_type_ids, attention_mask, pixel_values, labels
 
