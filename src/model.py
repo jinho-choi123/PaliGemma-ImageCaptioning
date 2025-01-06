@@ -68,7 +68,7 @@ class ImageCaptioningModel(L.LightningModule):
         self.log("val/epoch_rouge1", rouge1_score, on_epoch=True)
         
         # if the verbose flag is set, log the first 5 examples
-        if self.config.get("verbose", False) and batch_idx <= 5:
+        if self.config.get("verbose", False) and batch_idx <= 3:
             columns = ["global_step", "image", "ground_truth", "prediction"]
             datas = [
                     [self.global_step, wandb.Image(pixel_values[i]), labels[i], predictions[i]] for i in range(1)
@@ -94,7 +94,7 @@ class ImageCaptioningModel(L.LightningModule):
                 shuffle=True,
                 collate_fn=train_collate_fn,
                 pin_memory=True,
-                num_workers=2,
+                num_workers=self.config.get("num_workers", 2),
                 )   
 
     def val_dataloader(self):
@@ -104,5 +104,5 @@ class ImageCaptioningModel(L.LightningModule):
                 shuffle=False,
                 collate_fn=test_collate_fn,
                 pin_memory=True,
-                num_workers=2,
+                num_workers=self.config.get("num_workers", 2),
                 )
