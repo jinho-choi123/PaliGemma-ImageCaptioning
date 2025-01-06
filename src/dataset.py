@@ -27,13 +27,6 @@ def train_collate_fn(batch):
     pixel_values = inputs["pixel_values"]
     labels = inputs["labels"]
 
-    print(f"train_collate_fn")
-    print(f"input_ids: {input_ids.size()}")
-    print(f"token_type_ids: {token_type_ids.size()}")
-    print(f"attention_mask: {attention_mask.size()}")
-    print(f"pixel_values: {pixel_values.size()}")
-    print(f"labels: {labels.size()}")
-
     # check if the input_ids length is 16 * 16 + max_length
     # 16 * 16 is the length of the image tokens
     # max_length is the length of the prompt tokens with padding
