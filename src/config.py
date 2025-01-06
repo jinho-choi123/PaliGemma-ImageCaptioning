@@ -8,5 +8,5 @@ config = {
         "hf_checkpoint_repo_id": "ball1433/Paligemma-ImageCaptioning",
         "batch_size": 4, # for L4 GPU: 8, T4: 2
         "verbose": True,
-        "lr": 5e-3, 
+        "lr": 5e-4, 
         }
