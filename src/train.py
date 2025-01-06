@@ -9,6 +9,7 @@ from .dataset import processor
 from .train_callbacks import PushToHubCallback
 import lightning as L
 from lightning.pytorch import seed_everything
+from lightning.pytorch.tuner import Tuner
 
 seed_everything(42, workers=True)
 
@@ -42,5 +43,9 @@ trainer = L.Trainer(
         logger=wandb_logger,
         callbacks=[PushToHubCallback()],
         )
+
+tuner = Tuner(trainer)
+
+tuner.scale_batch_size(model_module)
 
 trainer.fit(model_module)
