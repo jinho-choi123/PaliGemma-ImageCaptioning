@@ -40,7 +40,8 @@ trainer = L.Trainer(
         gradient_clip_val=1.0,
         num_sanity_val_steps=5,
         logger=wandb_logger,
-        callbacks=[PushToHubCallback()]
+        callbacks=[PushToHubCallback()],
+        val_check_interval=0.5,
         )
 
 tuner = Tuner(trainer)
