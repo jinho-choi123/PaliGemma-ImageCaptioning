@@ -22,7 +22,10 @@ class ImageCaptioningModel(L.LightningModule):
 
         self.train_losses = []
 
-    def training_step(self, batch_,  batch_idx):
+    def on_train_epoch_start(self):
+        self.train_losses = []
+
+    def training_step(self, batch_, batch_idx):
 
         input_ids, token_type_ids, attention_mask, pixel_values, labels = batch_
 
@@ -39,6 +42,8 @@ class ImageCaptioningModel(L.LightningModule):
 
         self.log("train/step_loss", train_loss)
         self.log("train/epoch_loss", train_loss, on_epoch=True)
+        if batch_idx % 50 == 1:
+            print(f'Average Training Loss in EPOCH #{self.current_epoch} | STEP #{batch_idx}: {np.mean(self.train_losses)}')
 
         return train_loss
     
