@@ -64,9 +64,9 @@ class ImageCaptioningModel(L.LightningModule):
         
         # if the verbose flag is set, log the first 5 examples
         if self.config.get("verbose", False) and batch_idx <= 5:
-            columns = ["image", "ground_truth", "prediction"]
+            columns = ["global_step", "image", "ground_truth", "prediction"]
             datas = [
-                    [wandb.Image(pixel_values[i]), labels[i], predictions[i]] for i in range(1)
+                    [self.global_step, wandb.Image(pixel_values[i]), labels[i], predictions[i]] for i in range(1)
                     ]
 
             self.logger.log_table(key="val/examples", columns=columns, data=datas)
@@ -79,7 +79,7 @@ class ImageCaptioningModel(L.LightningModule):
         self.train_losses = []
 
     def configure_optimizers(self):
-        optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         return optimizer
 
     def train_dataloader(self):

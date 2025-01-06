@@ -8,6 +8,7 @@ from .model import ImageCaptioningModel
 from .dataset import processor
 from .train_callbacks import PushToHubCallback
 import lightning as L
+from lightning.pytorch.tuner import Tuner
 
 torch.manual_seed(42)
 
@@ -41,5 +42,10 @@ trainer = L.Trainer(
         logger=wandb_logger,
         callbacks=[PushToHubCallback()]
         )
+
+tuner = Tuner(trainer)
+
+# Automatically find the best batch size
+tuner.scale_batch_size(model_module)
 
 trainer.fit(model_module)
