@@ -42,6 +42,7 @@ trainer = L.Trainer(
         num_sanity_val_steps=5,
         logger=wandb_logger,
         callbacks=[PushToHubCallback()],
+        val_check_interval=0.1,
         )
 
 # tuner = Tuner(trainer)
