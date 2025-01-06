@@ -19,7 +19,7 @@ def train_collate_fn(batch):
     labels = [item[1] for item in batch]
     prompts = ["<image>generated caption:" for _ in batch]
 
-    inputs = processor(text=prompts, images=images, suffix=labels, return_tensors="pt", padding=True, truncation=True, max_length=config.get("max_length"))
+    inputs = processor(text=prompts, images=images, suffix=labels, return_tensors="pt", padding='max_length', truncation=True, max_length=config.get("max_length"))
 
     input_ids = inputs["input_ids"]
     token_type_ids = inputs["token_type_ids"]
@@ -50,7 +50,7 @@ def test_collate_fn(batch):
     labels = [item[1] for item in batch]
     prompts = ["<image>generated caption:" for _ in batch]
     
-    inputs = processor(text=prompts, images=images, return_tensors="pt", padding=True, truncation=True, max_length=config.get("max_length"))
+    inputs = processor(text=prompts, images=images, return_tensors="pt", truncation=True)
 
     input_ids = inputs["input_ids"]
     attention_mask = inputs["attention_mask"]
