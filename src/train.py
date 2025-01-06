@@ -8,9 +8,9 @@ from .model import ImageCaptioningModel
 from .dataset import processor
 from .train_callbacks import PushToHubCallback
 import lightning as L
-from lightning.pytorch.tuner import Tuner
+from lightning.pytorch import seed_everything
 
-torch.manual_seed(42)
+seed_everything(42, workers=True)
 
 # define wandb logger
 wandb_logger = WandbLogger(project=config.get("wandb_project"))
@@ -43,10 +43,5 @@ trainer = L.Trainer(
         callbacks=[PushToHubCallback()],
         val_check_interval=0.5,
         )
-
-tuner = Tuner(trainer)
-
-# Automatically find the best batch size
-# tuner.scale_batch_size(model_module)
 
 trainer.fit(model_module)
