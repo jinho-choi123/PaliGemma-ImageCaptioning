@@ -46,6 +46,6 @@ trainer = L.Trainer(
 tuner = Tuner(trainer)
 
 # Automatically find the best batch size
-tuner.scale_batch_size(model_module)
+# tuner.scale_batch_size(model_module)
 
 trainer.fit(model_module)
