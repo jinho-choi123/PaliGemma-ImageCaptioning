@@ -8,5 +8,5 @@ config = {
         "hf_checkpoint_repo_id": "ball1433/Paligemma-ImageCaptioning",
         "batch_size": 2,
         "verbose": True,
-        "lr": 1e-4, 
+        "lr": 5e-5, 
         }
