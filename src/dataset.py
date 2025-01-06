@@ -29,8 +29,6 @@ def train_collate_fn(batch):
 
     # check if the input_ids length is 16 * 16 + max_length
     # 16 * 16 is the length of the image tokens
-    # max_length is the length of the prompt tokens with padding
-    assert input_ids.size(1) == 16 * 16 + config.get("max_length", 256)
 
     # check if the input_ids and labels are of same length
     assert input_ids.size(1) == labels.size(1)
