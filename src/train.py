@@ -47,5 +47,6 @@ trainer = L.Trainer(
 tuner = Tuner(trainer)
 
 tuner.scale_batch_size(model_module)
+tuner.lr_find(model_module)
 
 trainer.fit(model_module)
