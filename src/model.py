@@ -92,7 +92,9 @@ class ImageCaptioningModel(L.LightningModule):
                 train_dataset,
                 batch_size=self.batch_size,
                 shuffle=True,
-                collate_fn=train_collate_fn
+                collate_fn=train_collate_fn,
+                pin_memory=True,
+                num_workers=2,
                 )   
 
     def val_dataloader(self):
@@ -100,5 +102,7 @@ class ImageCaptioningModel(L.LightningModule):
                 val_dataset,
                 batch_size=self.batch_size,
                 shuffle=False,
-                collate_fn=test_collate_fn
+                collate_fn=test_collate_fn,
+                pin_memory=True,
+                num_workers=2,
                 )
