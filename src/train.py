@@ -1,6 +1,6 @@
 # Actual training happens here
-from lightning.pytorch import seed_everything
-seed_everything(42, workers=True)
+# from lightning.pytorch import seed_everything
+# seed_everything(42, workers=True)
 
 from transformers import BitsAndBytesConfig, PaliGemmaForConditionalGeneration
 from peft import get_peft_model, LoraConfig
