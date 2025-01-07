@@ -1,5 +1,6 @@
 # Actual training happens here
 
+from peft.peft_model import PeftModel
 from peft.utils.save_and_load import load_peft_weights, set_peft_model_state_dict
 import torch
 torch.manual_seed(42)
@@ -28,10 +29,12 @@ lora_config = LoraConfig(
         task_type="CAUSAL_LM",
         )
 
+model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
+
+
 if config.get("load_lora", False):
-    model = AutoPeftModel.from_pretrained(config.get("hf_checkpoint_repo_id"), quantization_config=bnb_config)
+    model = PeftModel.from_pretrained(model, config.get("hf_checkpoint_repo_id"), quantization_config=bnb_config)
 else:
-    model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
     model = get_peft_model(model, lora_config)
 
 model.print_trainable_parameters()
