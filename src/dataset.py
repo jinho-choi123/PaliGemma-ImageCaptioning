@@ -44,7 +44,7 @@ def test_collate_fn(batch):
     labels = [item[1] for item in batch]
     prompts = ["<image>Caption for the image is " for _ in batch]
     
-    inputs = processor(text=prompts, images=images, return_tensors="pt", padding=True, truncation="only_second", truncation_side="right")
+    inputs = processor(text=prompts, images=images, return_tensors="pt", padding=True, truncation="only_second", max_length=config.get("max_length"))
 
     input_ids = inputs["input_ids"]
     attention_mask = inputs["attention_mask"]
