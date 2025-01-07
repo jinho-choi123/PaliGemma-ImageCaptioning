@@ -29,7 +29,7 @@ lora_config = LoraConfig(
         )
 
 if config.get("load_lora", False):
-    model = AutoPeftModel.from_pretrained(config.get("lora_checkpoint_repo_id"), quantization_config=bnb_config)
+    model = AutoPeftModel.from_pretrained(config.get("hf_checkpoint_repo_id"), quantization_config=bnb_config)
 else:
     model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
     model = get_peft_model(model, lora_config)
