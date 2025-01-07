@@ -18,10 +18,11 @@ class ImageCaptioningModel(L.LightningModule):
         self.batch_size = self.config.get("batch_size", 32)
         self.processor = processor
         self.bleu_metric = evaluate.load("bleu", keep_in_memory=True)
-        # self.rouge_metric = evaluate.load("rouge", keep_in_memory=True)
+        self.rouge_metric = evaluate.load("rouge", keep_in_memory=True)
 
         self.train_losses = []
         self.val_bleu = []
+        self.val_rouge1 = []
 
     def on_train_epoch_start(self):
         self.train_losses = []
@@ -64,15 +65,20 @@ class ImageCaptioningModel(L.LightningModule):
         predictions = self.processor.batch_decode(generated_ids[:, input_ids.size(1)+1:], skip_special_tokens=True)
 
         bleu_score: float = self.bleu_metric.compute(references=labels, predictions=predictions)['bleu']
-        # rouge1_score: float = self.rouge_metric.compute(references=labels, predictions=predictions)['rouge1']
+        self.val_bleu.append(bleu_score)
+        rouge1_score: float = self.rouge_metric.compute(references=labels, predictions=predictions)['rouge1']
+        self.val_rouge1.append(rouge1_score)
+
         self.log("val/bleu", bleu_score)
         self.log("val/bleu_epoch", bleu_score, on_epoch=True)
         self.log("val/avg_bleu", np.mean(self.val_bleu))
 
 
-        # self.log("val/step_rouge1", rouge1_score)
-        # self.log("val/epoch_rouge1", rouge1_score, on_epoch=True)
-        
+        self.log("val/rouge1", rouge1_score)
+        self.log("val/epoch_rouge1", rouge1_score, on_epoch=True)
+        self.log("val/avg_rouge1", np.mean(self.val_rouge1))
+
+
         # if the verbose flag is set, log the first 5 examples
         if self.config.get("verbose", False) and batch_idx <= 3:
             columns = ["global_step", "image", "ground_truth", "prediction"]
