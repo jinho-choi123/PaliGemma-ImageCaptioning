@@ -1,11 +1,11 @@
 # Actual training happens here
 
-from peft.peft_model import PeftModel
+from peft.peft_model import PeftModel, PeftModelForCausalLM
 from peft.utils.save_and_load import load_peft_weights, set_peft_model_state_dict
 import torch
 torch.manual_seed(42)
 from transformers import BitsAndBytesConfig, PaliGemmaForConditionalGeneration
-from peft import get_peft_model, LoraConfig, AutoPeftModel
+from peft import get_peft_model, LoraConfig, AutoPeftModelForCausalLM
 from .config import config
 from lightning.pytorch.loggers import WandbLogger
 from .model import ImageCaptioningModel
@@ -33,9 +33,9 @@ lora_config = LoraConfig(
 
 if config.get("load_lora", False):
     # model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("hf_checkpoint_repo_id"), quantization_config=bnb_config)
-    model = AutoPeftModel.from_pretrained(config.get("hf_checkpoint_repo_id"), quantization_config=bnb_config)
+    model = AutoPeftModelForCausalLM.from_pretrained(config.get("hf_checkpoint_repo_id"), quantization_config=bnb_config)
+
 else:
-    model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
     model = get_peft_model(model, lora_config)
 
 model.print_trainable_parameters()
