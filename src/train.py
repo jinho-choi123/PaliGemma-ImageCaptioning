@@ -1,10 +1,9 @@
 # Actual training happens here
-# from lightning.pytorch import seed_everything
-# seed_everything(42, workers=True)
 
+import torch
+torch.manual_seed(42)
 from transformers import BitsAndBytesConfig, PaliGemmaForConditionalGeneration
 from peft import get_peft_model, LoraConfig
-import torch
 from .config import config
 from lightning.pytorch.loggers import WandbLogger
 from .model import ImageCaptioningModel
