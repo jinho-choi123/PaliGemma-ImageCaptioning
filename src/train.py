@@ -4,7 +4,7 @@ from peft.utils.save_and_load import load_peft_weights, set_peft_model_state_dic
 import torch
 torch.manual_seed(42)
 from transformers import BitsAndBytesConfig, PaliGemmaForConditionalGeneration
-from peft import get_peft_model, LoraConfig
+from peft import get_peft_model, LoraConfig, AutoPeftModel
 from .config import config
 from lightning.pytorch.loggers import WandbLogger
 from .model import ImageCaptioningModel
@@ -28,13 +28,11 @@ lora_config = LoraConfig(
         task_type="CAUSAL_LM",
         )
 
-model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
-
-model = get_peft_model(model, lora_config)
 if config.get("load_lora", False):
-    lora_weights = load_peft_weights(config.get("lora_checkpoint_repo_id"))
-    set_peft_model_state_dict(model, lora_weights)
-
+    model = AutoPeftModel.from_pretrained(config.get("lora_checkpoint_repo_id"), quantization_config=bnb_config)
+else:
+    model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
+    model = get_peft_model(model, lora_config)
 
 model.print_trainable_parameters()
 
