@@ -1,4 +1,7 @@
 # Actual training happens here
+from lightning.pytorch import seed_everything
+seed_everything(42, workers=True)
+
 from transformers import BitsAndBytesConfig, PaliGemmaForConditionalGeneration
 from peft import get_peft_model, LoraConfig
 import torch
@@ -8,10 +11,8 @@ from .model import ImageCaptioningModel
 from .dataset import processor
 from .train_callbacks import PushToHubCallback
 import lightning as L
-from lightning.pytorch import seed_everything
 from lightning.pytorch.tuner import Tuner
 
-seed_everything(42, workers=True)
 
 # define wandb logger
 wandb_logger = WandbLogger(project=config.get("wandb_project"))
