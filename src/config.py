@@ -6,6 +6,7 @@ config = {
         "lora_r": 8,
         "wandb_project": "paligemma-image-captioning",
         "hf_checkpoint_repo_id": "ball1433/Paligemma-ImageCaptioning",
+        "load_lora": True,
         "batch_size": 5, # for L4 GPU: 8, T4: 2
         "verbose": True,
         "lr": 3e-4, 

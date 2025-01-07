@@ -29,7 +29,11 @@ lora_config = LoraConfig(
 
 model = PaliGemmaForConditionalGeneration.from_pretrained(config.get("pretrained_repo_id"), quantization_config=bnb_config)
 
-model = get_peft_model(model, lora_config)
+if config.get("load_lora", False):
+    model.load_adapter(config.get("hf_checkpoint_repo_id"))
+else:
+    model = get_peft_model(model, lora_config)
+
 
 model.print_trainable_parameters()
 
