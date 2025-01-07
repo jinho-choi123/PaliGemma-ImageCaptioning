@@ -37,4 +37,19 @@ $ cd PaliGemma-ImageCaptioning
 $ python -m src.train
 ```
 
+## Getting Started - Inference in Colab
+In Colab, please run the following notebook. For inference, T4 GPU is enough.
+```jupyter
+# Cell 1
+%%bash
+git clone https://github.com/jinho-choi123/PaliGemma-ImageCaptioning.git
 
+# Cell 2
+!pip install -q transformers peft
+```
+
+Next, set the `IMG_PATH` variable in `src/inference.py` file. Then run the following command in the Colab Terminal(or in notebook cell with `%%bash`)
+```bash
+$ cd PaliGemma-ImageCaptioning
+$ python -m src.inference
+```
