@@ -18,12 +18,16 @@ class ImageCaptioningModel(L.LightningModule):
         self.batch_size = self.config.get("batch_size", 32)
         self.processor = processor
         self.bleu_metric = evaluate.load("bleu", keep_in_memory=True)
-        self.rouge_metric = evaluate.load("rouge", keep_in_memory=True)
+        # self.rouge_metric = evaluate.load("rouge", keep_in_memory=True)
 
         self.train_losses = []
+        self.val_bleu = []
 
     def on_train_epoch_start(self):
         self.train_losses = []
+
+    def on_validation_epoch_start(self):
+        self.val_bleu = []
 
     def training_step(self, batch_, batch_idx):
 
@@ -40,10 +44,10 @@ class ImageCaptioningModel(L.LightningModule):
         train_loss = outputs.loss
         self.train_losses.append(train_loss.item())
 
-        self.log("train/step_loss", train_loss)
-        self.log("train/epoch_loss", train_loss, on_epoch=True)
-        if batch_idx % 50 == 1:
-            print(f'Average Training Loss in EPOCH #{self.current_epoch} | STEP #{batch_idx}: {np.mean(self.train_losses)}')
+        self.log("train/loss", train_loss)
+        self.log("train/loss_epoch", train_loss, on_epoch=True)
+        self.log("train/avg_loss", np.mean(self.train_losses))
+        self.log("train/avg_loss_epoch", np.mean(self.train_losses), on_epoch=True)
 
         return train_loss
     
@@ -60,12 +64,14 @@ class ImageCaptioningModel(L.LightningModule):
         predictions = self.processor.batch_decode(generated_ids[:, input_ids.size(1)+1:], skip_special_tokens=True)
 
         bleu_score: float = self.bleu_metric.compute(references=labels, predictions=predictions)['bleu']
-        rouge1_score: float = self.rouge_metric.compute(references=labels, predictions=predictions)['rouge1']
-        self.log("val/step_bleu", bleu_score)
-        self.log("val/epoch_bleu", bleu_score, on_epoch=True)
+        # rouge1_score: float = self.rouge_metric.compute(references=labels, predictions=predictions)['rouge1']
+        self.log("val/bleu", bleu_score)
+        self.log("val/bleu_epoch", bleu_score, on_epoch=True)
+        self.log("val/avg_bleu", np.mean(self.val_bleu))
 
-        self.log("val/step_rouge1", rouge1_score)
-        self.log("val/epoch_rouge1", rouge1_score, on_epoch=True)
+
+        # self.log("val/step_rouge1", rouge1_score)
+        # self.log("val/epoch_rouge1", rouge1_score, on_epoch=True)
         
         # if the verbose flag is set, log the first 5 examples
         if self.config.get("verbose", False) and batch_idx <= 3:
