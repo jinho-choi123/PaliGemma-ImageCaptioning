@@ -17,8 +17,8 @@ class ImageCaptioningModel(L.LightningModule):
         self.lr = self.config.get("lr", 1e-3)
         self.batch_size = self.config.get("batch_size", 32)
         self.processor = processor
-        self.bleu_metric = evaluate.load("bleu")
-        self.rouge_metric = evaluate.load("rouge")
+        self.bleu_metric = evaluate.load("bleu", keep_in_memory=True)
+        self.rouge_metric = evaluate.load("rouge", keep_in_memory=True)
 
         self.train_losses = []
 
