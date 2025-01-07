@@ -22,14 +22,11 @@ git clone https://github.com/jinho-choi123/PaliGemma-ImageCaptioning.git
 source ./download-data.sh
 
 # Cell 4
-# !pip install -qr requirements.txt
 !pip install -q transformers bitsandbytes lightning peft datasets evaluate rouge_score
 
 # Cell 5
-# login to huggingface hub
 from huggingface_hub import notebook_login
 import wandb
-
 notebook_login()
 wandb.login(key="<your_wandb_key>") # add your wandb key here
 ```
