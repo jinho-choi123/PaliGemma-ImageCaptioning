@@ -5,6 +5,9 @@ import torch
 from PIL import Image
 from transformers import AutoProcessor
 
+# define device
+device = torch.device("cuda")
+
 # define a processor for paligemma
 processor = AutoProcessor.from_pretrained(config.get("pretrained_repo_id"))
 
@@ -21,6 +24,8 @@ print(f"Loaded PaliGemma model...")
 # set the is_trainable flag as False because we are doing inference-only
 model = PeftModel.from_pretrained(model, config.get("hf_checkpoint_repo_id"), is_trainable=False)
 print(f"Loaded peft adapter for PaliGemma model...")
+
+model.to(device)
 
 with torch.no_grad():
     inference_inputs = processor(text=prompts, images=images, return_tensors="pt")
