@@ -61,6 +61,8 @@ If you want to change the image that is used in image captioning, put the new im
 To compare the performance of the model before and after training, we used a example image in `examples/example.jpg`.
 It is a picture of Lebron James wearing Los Angeles Lakers jersey. 
 
+![alt text](examples/example.jpg)
+
 The model before training generated the following caption:
 ```
 bron james
