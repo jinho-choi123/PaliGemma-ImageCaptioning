@@ -30,9 +30,9 @@ model.to(device)
 with torch.no_grad():
     inference_inputs = processor(text=prompts, images=images, return_tensors="pt")
     print(f"processing the input image completed...")
-    input_ids = inference_inputs["input_ids"]
-    attention_mask = inference_inputs["attention_mask"]
-    pixel_values = inference_inputs["pixel_values"]
+    input_ids = inference_inputs["input_ids"].to(device)
+    attention_mask = inference_inputs["attention_mask"].to(device)
+    pixel_values = inference_inputs["pixel_values"].to(device)
 
     generated_ids = model.generate(
             input_ids=input_ids,
