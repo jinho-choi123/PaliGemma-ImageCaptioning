@@ -59,14 +59,18 @@ If you want to change the image that is used in image captioning, put the new im
 ## Before/After Training
 
 To compare the performance of the model before and after training, we used a example image in `examples/example.jpg`.
-It is a picture of Lebron James wearing Los Angeles Lakers jersey. The model before training generated the following caption:
+It is a picture of Lebron James wearing Los Angeles Lakers jersey. 
 
+The model before training generated the following caption:
 ```
-
+bron james
 ```
 
 The model after training generated the following caption:
-
 ```
 basketball player in a yellow jersey with the number 6 is holding a basketball on a court. The player has tattoos on his arms and legs, and is wearing a bracelet on his left wrist. The background shows a blurred view of other players and a referee, with a focus on the player in the foreground
 ```
+
+The training made the model generate more detailed explanation of the image. 
+
+
